@@ -15,97 +15,86 @@ const boardOption = () => {
   return option[index];
 };
 
-let playerOnePosition = 0;
-let playerTwoPosition = 0;
+let players = [];
+let playersDiceRollingCount = {};
+let playersPosition = {};
+let initialPlayer = 0;
+let playerCount = 0;
 
-let playerOneDiceRollingCount = 0;
-let playerTwoDiceRollingCount = 0;
+const game = (playerCount, startGame) => {
+  let player = players[initialPlayer];
 
-const player1 = (dice) => {
-  if (dice === "spin") {
-    playerOneDiceRollingCount++;
+  if (startGame === "spin" && initialPlayer < playerCount) {
+    playersDiceRollingCount[player]++;
+
     const value = diceValue();
     const option = boardOption();
-    console.log("Player1");
+    console.log(players[initialPlayer]);
     console.log(`Dice Number: ${value}`);
 
-    if (option === "No Play") {
+    if (option === "No Play" && initialPlayer < playerCount) {
       console.log("No Play");
-      console.log(`Current position:${playerOnePosition} `);
-      getInput(player2);
-    } else if (option === "Ladder") {
+
+      console.log(`Current position:${playersPosition[player]} `);
+      initialPlayer++;
+      getInput();
+    } else if (option === "Ladder" && initialPlayer < playerCount) {
       console.log("Ladder");
-      playerOnePosition += value;
-      if (playerOnePosition > 100) {
-        playerOnePosition -= value;
-      } else if (playerOnePosition === 100) {
-        console.log(`Current position:${playerOnePosition} You are win`);
+      playersPosition[player] += value;
+      if (playersPosition[player] > 100) {
+        playersPosition[player] -= value;
+      } else if (playersPosition[player] === 100) {
+        console.log(`Current position:${playersPosition[player]} You are win`);
         console.log(
-          `Number of times dice was played:${playerOneDiceRollingCount}`
+          `Number of times dice was played:${playersDiceRollingCount[player]}`
         );
         rl.close();
         return;
       }
-      console.log(`Current position:${playerOnePosition} `);
-      getInput(player1);
-    } else if (option === "Snake") {
+      console.log(`Current position:${playersPosition[player]} `);
+      getInput();
+    } else if (option === "Snake" && initialPlayer < playerCount) {
       console.log("Snake");
-      playerOnePosition -= value;
-      if (playerOnePosition < 0) {
-        playerOnePosition = 0;
+      playersPosition[player] -= value;
+      if (playersPosition[player] < 0) {
+        playersPosition[player] = 0;
       }
-      console.log(`Current position:${playerOnePosition} `);
-      getInput(player2);
+      console.log(`Current position:${playersPosition[player]} `);
+      initialPlayer++;
+      getInput();
+    } else {
+      initialPlayer = 0;
+      getInput();
     }
+  } else if (initialPlayer >= playerCount) {
+    initialPlayer = 0;
+    game(playerCount, startGame);
   } else {
     console.log("Please type spin");
-    getInput(player1);
+    getInput();
   }
 };
 
-const player2 = (dice) => {
-  if (dice === "spin") {
-    playerTwoDiceRollingCount++;
-    const value = diceValue();
-    const option = boardOption();
-    console.log("Player2");
-    console.log(`Dice Number: ${value}`);
-
-    if (option === "No Play") {
-      console.log("No Play");
-      console.log(`Current position:${playerTwoPosition} `);
-      getInput(player1);
-    } else if (option === "Ladder") {
-      console.log("Ladder");
-      playerTwoPosition += value;
-      if (playerTwoPosition > 100) {
-        playerTwoPosition -= value;
-      } else if (playerTwoPosition === 100) {
-        console.log(`Current position:${playerTwoPosition} You are win`);
-        console.log(
-          `Number of times dice was played:${playerTwoDiceRollingCount}`
-        );
-        rl.close();
-        return;
+const getPlayerCount = () => {
+  return rl.question(
+    "Well come to Snake Ladder Game! Enter Player count: ",
+    (count) => {
+      playerCount = count;
+      for (let i = 1; i <= playerCount; i++) {
+        const name = `player${i}`;
+        players[i - 1] = name;
+        playersDiceRollingCount[name] = 0;
+        playersPosition[name] = 0;
       }
-      console.log(`Current position:${playerTwoPosition} `);
-      getInput(player2);
-    } else if (option === "Snake") {
-      console.log("Snake");
-      playerTwoPosition -= value;
-      if (playerTwoPosition < 0) {
-        playerTwoPosition = 0;
-      }
-      console.log(`Current position:${playerTwoPosition} `);
-      getInput(player1);
+      getInput();
     }
-  } else {
-    console.log("Please type spin");
-    getInput(player2);
-  }
+  );
 };
 
-const getInput = (player1) => {
-  return rl.question("Spin the dice(Enter spin): ", player1);
+getPlayerCount();
+
+const getInput = () => {
+  return rl.question("Spin the dice(Enter spin): ", (startGame) => {
+    game(playerCount, startGame);
+  });
 };
-getInput(player1);
