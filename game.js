@@ -25,26 +25,52 @@ let computerCoin = "";
 let user = false;
 let computer = false;
 
+// Handle winning possibility
+const winningPossibility = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 4, 8],
+  [6, 4, 2],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+];
+
 // Handle check win
 const checkWinner = (coin) => {
-  if (option[0] === coin && option[1] === coin && option[2] === coin)
-    return true;
-  else if (option[3] === coin && option[4] === coin && option[5] === coin)
-    return true;
-  else if (option[6] === coin && option[7] === coin && option[8] === coin)
-    return true;
-  else if (option[0] === coin && option[4] === coin && option[8] === coin)
-    return true;
-  else if (option[6] === coin && option[4] === coin && option[2] === coin)
-    return true;
-  else if (option[0] === coin && option[3] === coin && option[6] === coin)
-    return true;
-  else if (option[1] === coin && option[4] === coin && option[7] === coin)
-    return true;
-  else if (option[2] === coin && option[5] === coin && option[8] === coin)
-    return true;
-  else return false;
+  for (let i = 0; i < winningPossibility.length; i++) {
+    const [optionOne, optionTwo, optionThree] = winningPossibility[i];
+    if (
+      option[optionOne] === coin &&
+      option[optionTwo] === coin &&
+      option[optionThree] === coin
+    ) {
+      return true;
+    }
+  }
+  return false;
 };
+
+// const checkWinner = (coin) => {
+//   if (option[0] === coin && option[1] === coin && option[2] === coin)
+//     return true;
+//   else if (option[3] === coin && option[4] === coin && option[5] === coin)
+//     return true;
+//   else if (option[6] === coin && option[7] === coin && option[8] === coin)
+//     return true;
+//   else if (option[0] === coin && option[4] === coin && option[8] === coin)
+//     return true;
+//   else if (option[6] === coin && option[4] === coin && option[2] === coin)
+//     return true;
+//   else if (option[0] === coin && option[3] === coin && option[6] === coin)
+//     return true;
+//   else if (option[1] === coin && option[4] === coin && option[7] === coin)
+//     return true;
+//   else if (option[2] === coin && option[5] === coin && option[8] === coin)
+//     return true;
+//   else return false;
+// };
 
 // handle check draw
 const checkDraw = () => {
@@ -69,56 +95,83 @@ const nextMove = () => {
 };
 
 // Handle computer option choice
+
 const checkWinOrBlock = (coin) => {
-  if (option[0] === "" && option[1] === coin && option[2] === coin) return 0;
-  else if (option[0] === coin && option[1] === "" && option[2] === coin)
-    return 1;
-  else if (option[0] === coin && option[1] === coin && option[2] === "")
-    return 2;
-  else if (option[3] === "" && option[4] === coin && option[5] === coin)
-    return 3;
-  else if (option[3] === coin && option[4] === "" && option[5] === coin)
-    return 4;
-  else if (option[3] === coin && option[4] === coin && option[5] === "")
-    return 5;
-  else if (option[6] === "" && option[7] === coin && option[8] === coin)
-    return 6;
-  else if (option[6] === coin && option[7] === "" && option[8] === coin)
-    return 7;
-  else if (option[6] === coin && option[7] === coin && option[8] === "")
-    return 8;
-  else if (option[0] === "" && option[4] === coin && option[8] === coin)
-    return 0;
-  else if (option[0] === coin && option[4] === "" && option[8] === coin)
-    return 4;
-  else if (option[0] === coin && option[4] === coin && option[8] === "")
-    return 8;
-  else if (option[6] === "" && option[4] === coin && option[2] === coin)
-    return 6;
-  else if (option[6] === coin && option[4] === "" && option[2] === coin)
-    return 4;
-  else if (option[6] === coin && option[4] === coin && option[2] === "")
-    return 2;
-  else if (option[0] === "" && option[3] === coin && option[6] === coin)
-    return 0;
-  else if (option[0] === coin && option[3] === "" && option[6] === coin)
-    return 3;
-  else if (option[0] === coin && option[3] === coin && option[6] === "")
-    return 6;
-  else if (option[1] === "" && option[4] === coin && option[7] === coin)
-    return 1;
-  else if (option[1] === coin && option[4] === "" && option[7] === coin)
-    return 4;
-  else if (option[1] === coin && option[4] === coin && option[7] === "")
-    return 7;
-  else if (option[2] === "" && option[5] === coin && option[8] === coin)
-    return 2;
-  else if (option[2] === coin && option[5] === "" && option[8] === coin)
-    return 5;
-  else if (option[2] === coin && option[5] === coin && option[8] === "")
-    return 8;
-  else return false;
+  for (let i = 0; i < winningPossibility.length; i++) {
+    const [optionOne, optionTwo, optionThree] = winningPossibility[i];
+    if (
+      option[optionOne] === "" &&
+      option[optionTwo] === coin &&
+      option[optionThree] === coin
+    ) {
+      return optionOne;
+    } else if (
+      option[optionOne] === coin &&
+      option[optionTwo] === "" &&
+      option[optionThree] === coin
+    ) {
+      return optionTwo;
+    } else if (
+      option[optionOne] === coin &&
+      option[optionTwo] === coin &&
+      option[optionThree] === ""
+    ) {
+      return optionThree;
+    }
+  }
+  return false;
 };
+
+// const checkWinOrBlock = (coin) => {
+//   if (option[0] === "" && option[1] === coin && option[2] === coin) return 0;
+//   else if (option[0] === coin && option[1] === "" && option[2] === coin)
+//     return 1;
+//   else if (option[0] === coin && option[1] === coin && option[2] === "")
+//     return 2;
+//   else if (option[3] === "" && option[4] === coin && option[5] === coin)
+//     return 3;
+//   else if (option[3] === coin && option[4] === "" && option[5] === coin)
+//     return 4;
+//   else if (option[3] === coin && option[4] === coin && option[5] === "")
+//     return 5;
+//   else if (option[6] === "" && option[7] === coin && option[8] === coin)
+//     return 6;
+//   else if (option[6] === coin && option[7] === "" && option[8] === coin)
+//     return 7;
+//   else if (option[6] === coin && option[7] === coin && option[8] === "")
+//     return 8;
+//   else if (option[0] === "" && option[4] === coin && option[8] === coin)
+//     return 0;
+//   else if (option[0] === coin && option[4] === "" && option[8] === coin)
+//     return 4;
+//   else if (option[0] === coin && option[4] === coin && option[8] === "")
+//     return 8;
+//   else if (option[6] === "" && option[4] === coin && option[2] === coin)
+//     return 6;
+//   else if (option[6] === coin && option[4] === "" && option[2] === coin)
+//     return 4;
+//   else if (option[6] === coin && option[4] === coin && option[2] === "")
+//     return 2;
+//   else if (option[0] === "" && option[3] === coin && option[6] === coin)
+//     return 0;
+//   else if (option[0] === coin && option[3] === "" && option[6] === coin)
+//     return 3;
+//   else if (option[0] === coin && option[3] === coin && option[6] === "")
+//     return 6;
+//   else if (option[1] === "" && option[4] === coin && option[7] === coin)
+//     return 1;
+//   else if (option[1] === coin && option[4] === "" && option[7] === coin)
+//     return 4;
+//   else if (option[1] === coin && option[4] === coin && option[7] === "")
+//     return 7;
+//   else if (option[2] === "" && option[5] === coin && option[8] === coin)
+//     return 2;
+//   else if (option[2] === coin && option[5] === "" && option[8] === coin)
+//     return 5;
+//   else if (option[2] === coin && option[5] === coin && option[8] === "")
+//     return 8;
+//   else return false;
+// };
 
 // Handle computer move
 const computerMove = (coin) => {
@@ -141,23 +194,35 @@ const computerMove = (coin) => {
   }
 
   // Take corner
-  if (option[0] === "") return 0;
-  else if (option[2] == "") return 2;
-  else if (option[6] == "") return 6;
-  else if (option[8] == "") return 8;
+  const corners = [0, 2, 6, 8];
+  for (let i = 0; i < corners.length; i++) {
+    if (option[corners[i]] === "") {
+      return corners[i];
+    }
+  }
+  // if (option[0] === "") return 0;
+  // else if (option[2] == "") return 2;
+  // else if (option[6] == "") return 6;
+  // else if (option[8] == "") return 8;
 
   // Take Center
-  if (option[1] === "") return 1;
-  else if (option[3] == "") return 3;
-  else if (option[4] == "") return 4;
-  else if (option[5] == "") return 5;
-  else if (option[7] == "") return 7;
+  const centers = [1, 3, 4, 5, 7];
+  for (let i = 0; i < centers.length; i++) {
+    if (option[centers[i]] === "") {
+      return centers[i];
+    }
+  }
+  // if (option[1] === "") return 1;
+  // else if (option[3] == "") return 3;
+  // else if (option[4] == "") return 4;
+  // else if (option[5] == "") return 5;
+  // else if (option[7] == "") return 7;
 };
 
 // Handle tic tac toe game
 const game = (value) => {
   if (user) {
-    if (value > 8) {
+    if (value < 0 || value > 8) {
       console.log("Invalid position, Enter 0 to 8 choose place to play");
       nextMove();
       return;
@@ -261,7 +326,7 @@ const startGame = () => {
             rl.question("Choose X or O to play:", (value) => {
               assignUserCoin(value);
               console.log(`You play with ${value}`);
-              // board();
+              board();
               user = true;
               nextMove();
             });
@@ -269,7 +334,7 @@ const startGame = () => {
             console.log("Computer won the toss!");
             assignComputerCoin();
             console.log(`Computer play with ${computerCoin}`);
-            // board();
+            board();
 
             computer = true;
             nextMove();
